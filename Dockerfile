@@ -9,12 +9,7 @@ RUN curl -L -o /usr/local/bin/ttyd https://github.com/t-matsuo/ttyd/releases/dow
     chmod 755 /usr/local/bin/ttyd
 
 ### Envrionment config
-ENV HOME=/root \
-    USER=root \
-    PASSWORD=password \
-    UID=0 \
-    GID=0 \
-    PORT=8080 \
+ENV PORT=8080 \
     TTYD_OPTS="-p 10022 -P 30 -i lo /bin/bash"
 
 ### ADD and COPY files

@@ -19,13 +19,53 @@ if [ ! -f /etc/init-done ]; then
         echo "----------------------------------------"
     fi
 
+    if [ "$USER" = "" ]; then
+        USER="root"
+    fi
+
     if [ "$PASSWORD" = "" ]; then
         PASSWORD=`cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 8 | head -n 1`
-        echo "generating root user password : \"$PASSWORD\""
-    else
-        echo "please use your specified password"
+        echo
+        echo "*******************************************"
+        echo "***** $USER password is \"$PASSWORD\" *********"
+        echo "*******************************************"
+        echo
     fi
-    echo "root:${PASSWORD}" | chpasswd
+
+    if [ "$USER" != "root" ]; then
+        ROOT_PASSWORD=`cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 8 | head -n 1`
+        echo "root:${ROOT_PASSWORD}" | chpasswd
+
+        echo $USER | grep -q -w -e bin -e daemon -e adm -e lp -e sync -e shutdown \
+                                -e halt -e mail -e operator -e games -e ftp -e nobody \
+                                -e systemd-network -e dbus -e tcpdump -e nginx
+        if [ $? -eq 0 ]; then
+            echo "invalid user name: $USER"
+            exit 1
+        fi
+
+        if [ "$USER_ID" != "" ]; then
+            if [ $USER_ID -lt 1000 ]; then
+                echo "invalid uid: $USER_ID"
+                exit 1
+            fi
+        else
+            USER_ID=1000
+        fi
+
+        cp /root/.bashrc /etc/skel
+        cp /root/.vimrc /etc/skel
+        cp /root/.screenrc /etc/skel
+
+        useradd $USER -u $USER_ID -d /home/$USER
+        echo "${USER}:${PASSWORD}" | chpasswd
+        echo "user=$USER" >> /etc/supervisord.d/ttyd.ini
+        echo "directory=/home/$USER" >> /etc/supervisord.d/ttyd.ini
+        echo "environment=HOME=\"/home/$USER\"" >> /etc/supervisord.d/ttyd.ini
+    else
+        echo "root:${PASSWORD}" | chpasswd
+        echo "directory=/root" >> /etc/supervisord.d/ttyd.ini
+    fi
 
     # initializing nginx
     mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.org
