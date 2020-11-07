@@ -1,4 +1,4 @@
-# ttyd 
+# docker-ttyd
 
 Dockerfile to start web based terminal(ttyd) with pam auth using nginx reverse proxy.
 
