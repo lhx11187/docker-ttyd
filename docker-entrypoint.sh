@@ -62,6 +62,10 @@ if [ ! -f /etc/init-done ]; then
         echo "user=$USER" >> /etc/supervisord.d/ttyd.ini
         echo "directory=/home/$USER" >> /etc/supervisord.d/ttyd.ini
         echo "environment=HOME=\"/home/$USER\"" >> /etc/supervisord.d/ttyd.ini
+
+        if [ "$ENABLE_SUDO" = "true" ]; then
+            echo "$USER	ALL=(ALL)	NOPASSWD: ALL" >> /etc/sudoers
+        fi
     else
         echo "root:${PASSWORD}" | chpasswd
         echo "directory=/root" >> /etc/supervisord.d/ttyd.ini

@@ -2,7 +2,7 @@ FROM tmatsuo/centos:7
 
 # Install packages
 RUN yum install -y epel-release && \
-    yum install -y supervisor nginx && \
+    yum install -y supervisor nginx sudo && \
     yum clean all
 
 RUN curl -L -o /usr/local/bin/ttyd https://github.com/t-matsuo/ttyd/releases/download/1.6.1.1/ttyd_linux.x86_64 && \

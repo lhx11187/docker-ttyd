@@ -16,6 +16,9 @@ start ttyd with pam auth using nginx reverse proxy.
    * user password
    * if it's not set, random passwd is generated.
        * see container log
+* ENABLE_SUDO (true/false)
+   * specified `USER` can use sudo command with no password.
+   * `default: false`
 * TTYD_OPTS
    * ttyd args
    * `default: -O  -p 10022 -P 30 -i lo /bin/bash`
