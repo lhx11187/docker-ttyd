@@ -29,7 +29,7 @@ Access https://your-server-ip/ and login with ID=foo,PASSWORD=mypassword.
    * `default: false`
 * TTYD_OPTS
    * ttyd args
-   * `default: -O  -p 10022 -P 30 -i lo /bin/bash`
+   * `default: -p 10022 -P 30 -i lo /bin/bash`
        * don't change port `10022` which is specified by nginx reverse proxy.
 * NOSSL
    * disable https. (true/false)
