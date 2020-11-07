@@ -2,7 +2,7 @@
 
 start ttyd with pam auth using nginx reverse proxy.
 
-* Environment
+## Environment
 
 * PORT
    * listen port
