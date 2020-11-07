@@ -1,6 +1,14 @@
 # ttyd 
 
-start ttyd with pam auth using nginx reverse proxy.
+Dockerfile to start web based terminal(ttyd) with pam auth using nginx reverse proxy.
+
+# Usage
+
+```
+docker run -d -p 443:8080 -e USER=foo -e PASSWORD=mypassword --name ttyd tmatsuo/ttyd
+```
+
+Access https://your-server-ip/ and login with ID=foo,PASSWORD=mypassword.
 
 ## Environment
 
@@ -26,6 +34,6 @@ start ttyd with pam auth using nginx reverse proxy.
 * NOSSL
    * disable https. (true/false)
    * `default: false`
-   * you can specify key and crt file.
+   * you can specify key and crt file if NOSSL=false
        * ex (docker run with -v option)
        * -v /path/to/server.key:/etc/pki/nginx/server.key -v /path/to/server.crt:/etc/pki/nginx/server.crt 
