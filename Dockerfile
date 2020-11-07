@@ -10,7 +10,7 @@ RUN curl -L -o /usr/local/bin/ttyd https://github.com/t-matsuo/ttyd/releases/dow
 
 ### Envrionment config
 ENV PORT=8080 \
-    TTYD_OPTS="-O  -p 10022 -P 30 -i lo /bin/bash"
+    TTYD_OPTS="-p 10022 -P 30 -i lo /bin/bash"
 
 ### ADD and COPY files
 COPY ./nginx/nginx-module-auth-pam-1.5.2-1.el7.x86_64.rpm /tmp/
