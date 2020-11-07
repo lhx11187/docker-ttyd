@@ -16,6 +16,13 @@ start ttyd with pam auth using nginx reverse proxy.
    * user password
    * if it's not set, random passwd is generated.
        * see container log
+* TTYD_OPTS
+   * ttyd args
+   * `default: -O  -p 10022 -P 30 -i lo /bin/bash`
+       * don't change port `10022` which is specified by nginx reverse proxy.
 * NOSSL
    * disable https. (true/false)
    * `default: false`
+   * you can specify key and crt file.
+       * ex (docker run with -v option)
+       * -v /path/to/server.key:/etc/pki/nginx/server.key -v /path/to/server.crt:/etc/pki/nginx/server.crt 
