@@ -6,6 +6,10 @@ fi
 
 # pre hook
 if [ "$PRE_HOOK" != "" ]; then
+    if [ ! -f $PRE_HOOK ]; then
+        echo "PRE_HOOK file not found: $PRE_HOOK"
+        exit 1
+    fi
     echo "---- pre hook : $PRE_HOOK --------------"
     source $PRE_HOOK || exit 1
     echo "----------------------------------------"
@@ -14,6 +18,10 @@ fi
 if [ ! -f /etc/init-done ]; then
     # pre hook (once)
     if [ "$PRE_HOOK_ONCE" != "" ]; then
+        if [ ! -f $PRE_HOOK_ONCE ]; then
+            echo "PRE_HOOK_ONCE file not found: $PRE_HOOK_ONCE"
+            exit 1
+        fi
         echo "---- pre hook once : $PRE_HOOK_ONCE ----"
         source $PRE_HOOK_ONCE || exit 1
         echo "----------------------------------------"
@@ -45,6 +53,11 @@ if [ ! -f /etc/init-done ]; then
         fi
 
         if [ "$USER_ID" != "" ]; then
+            echo "$USER_ID" | grep -q '^[0-9]*$'
+            if [ $? -ne 0 ]; then
+                echo "invalid uid: $USER_ID"
+                exit 1
+            fi
             if [ $USER_ID -lt 1000 ]; then
                 echo "invalid uid: $USER_ID"
                 exit 1
@@ -58,6 +71,11 @@ if [ ! -f /etc/init-done ]; then
         cp /root/.screenrc /etc/skel
 
         if [ "$GROUP_ID" != "" ]; then
+            echo "$GROUP_ID" | grep -q '^[0-9]*$'
+            if [ $? -ne 0 ]; then
+                echo "invalid gid: $GROUP_ID"
+                exit 1
+            fi
             if [ $GROUP_ID -lt 1000 ]; then
                 echo "invalid gid: $GROUP_ID"
                 exit 1
@@ -103,11 +121,21 @@ EOF
             openssl x509 -days 3650 -req -signkey /etc/pki/nginx/server.key < /etc/pki/nginx/server.csr > /etc/pki/nginx/server.crt
         fi
     fi
+
+    echo "$PORT" | grep -q '^[0-9]*$'
+    if [ $? -ne 0 ]; then
+        echo "invalid port: $PORT"
+        exit 1
+    fi
     sed -i "s/8080/$PORT/g" /etc/nginx/nginx.conf
     # initializing nginx done
 
     # post hook (once)
     if [ "$POST_HOOK_ONCE" != "" ]; then
+        if [ ! -f $POST_HOOK_ONCE ]; then
+            echo "POST_HOOK_ONCE file not found: $POST_HOOK_ONCE"
+            exit 1
+        fi
         echo "---- post hook once : $POST_HOOK_ONCE ----"
         source $POST_HOOK_ONCE || exit 1
         echo "----------------------------------------"
@@ -122,6 +150,10 @@ export TTYD_OPTS
 
 # post hook
 if [ "$POST_HOOK" != "" ]; then
+    if [ ! -f $POST_HOOK ]; then
+        echo "POST_HOOK file not found: $POST_HOOK"
+        exit 1
+    fi
     echo "---- post hook : $POST_HOOK ------------"
     source $POST_HOOK || exit 1
     echo "----------------------------------------"
