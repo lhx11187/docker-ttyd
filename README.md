@@ -20,6 +20,9 @@ Access https://your-server-ip/ and login with ID=foo,PASSWORD=mypassword.
 * USER_ID
    * if USER is not root, you can specify UID.
    * `default: 1000`
+* GROUP_ID
+   * if USER is not root, you can specify GID.
+   * `default: (useradd command generates '1000' automatically)`
 * PASSWORD
    * user password
    * if it's not set, random passwd is generated.

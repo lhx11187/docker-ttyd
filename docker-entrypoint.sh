@@ -57,7 +57,17 @@ if [ ! -f /etc/init-done ]; then
         cp /root/.vimrc /etc/skel
         cp /root/.screenrc /etc/skel
 
-        useradd $USER -u $USER_ID -d /home/$USER
+        if [ "$GROUP_ID" != "" ]; then
+            if [ $GROUP_ID -lt 1000 ]; then
+                echo "invalid gid: $GROUP_ID"
+                exit 1
+            fi
+            groupadd -g $GROUP_ID $USER
+            useradd $USER -u $USER_ID -g $GROUP_ID -d /home/$USER
+        else
+            useradd $USER -u $USER_ID -d /home/$USER
+        fi
+
         echo "${USER}:${PASSWORD}" | chpasswd
         echo "user=$USER" >> /etc/supervisord.d/ttyd.ini
         echo "directory=/home/$USER" >> /etc/supervisord.d/ttyd.ini
